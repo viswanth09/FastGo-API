@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="FastGo-GetSchedules-ImplementationFlow" doc:id="ac96e483-33fe-48f4-8ebf-23c099401d7f" >
+		<db:select doc:name="Select" doc:id="b4131f7a-7f18-4b25-9d2f-0b489b58d47b" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from fastgoschedules where companyname = 'FastGo']]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="2a5672f7-1512-4fba-9522-1418ba4c1944" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="2fd16ecb-182e-4968-9af5-fe44a481b5fb" message="FastGo external-system api to get #[vars.serviceType] for transactionId: #[vars.transactionId]"/>
+	</sub-flow>
+</mule>
